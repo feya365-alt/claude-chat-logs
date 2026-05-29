@@ -19,6 +19,7 @@ if (-not $LatestSession) {
 $SessionId = $LatestSession.BaseName
 $Timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $OutputFile = "$ChatLogsPath\chat_$Timestamp.md"
+Set-Location $RepoPath
 
 # Парсим JSONL и строим markdown
 $Lines = Get-Content $LatestSession.FullName -Encoding UTF8
@@ -67,7 +68,6 @@ foreach ($Line in $Lines) {
 [System.IO.File]::WriteAllText($OutputFile, $ChatContent, [System.Text.Encoding]::UTF8)
 
 # Git commit и push
-Set-Location $RepoPath
 & "C:\Program Files\Git\bin\git.exe" add "chat-logs/"
 $Status = & "C:\Program Files\Git\bin\git.exe" status --porcelain
 if ($Status) {
